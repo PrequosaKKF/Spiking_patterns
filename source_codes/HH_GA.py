@@ -3,6 +3,7 @@ from neuron_models import *
 from neuron.units import ms, mV
 import pygad
 import json
+import os
 
 spike_type = 'FS_NoAdaptation'
 #units: [v] = [v_inf] = mV, [tau] = ms, [g] = uS/mm2, [A] = mm2, [i_ext] = nA, [c] = nF/mm2
@@ -72,13 +73,22 @@ except FileNotFoundError:
                         mutation_num_genes=2,
                         random_mutation_min_val=0,
                         random_mutation_max_val=100)
-print("|\tno. of generations\t|\tminimum fitness \t|\t50th percentile fitness\t|\tmaximum fitness \t|\n")
-print("---------------------------------------------------------------------------------------------------------------------------------\n")
 ga_instance.run()
+
+if not os.path.exists('log.txt'):
+  log_file = open('log.txt', 'a')
+  log_file.write("|\tno. of generations\t|\tminimum fitness \t|\t50th percentile fitness\t|\tmaximum fitness \t|\n")
+  log_file.write("-----------------------------------------------------------------------------------------------------------------------\n")
+else:
+  log_file = open('log.txt', 'a')
 fitnesses = ga_instance.last_generation_fitness
-print("|\t\t{}\t\t|\t{:.2E}\t\t|\t{:.2E}\t\t|\t{:.2E}\t\t|\n".format(ga_instance.generations_completed, fitnesses.min(), np.percentile(fitnesses, 50), fitnesses.max()))
-while ga_instance.last_generation_fitness.min() < 0.1 :
+log_file.write("|\t\t{}\t\t|\t{:.2E}\t\t|\t{:.2E}\t\t|\t{:.2E}\t\t|\n".format(ga_instance.generations_completed, fitnesses.min(), np.percentile(fitnesses, 50), fitnesses.max()))
+log_file.close()
+
+while ga_instance.last_generation_fitness.mean() < 0.1 :
   ga_instance.run()
   fitnesses = ga_instance.last_generation_fitness
-  print("|\t\t{}\t\t|\t{:.2E}\t\t|\t{:.2E}\t\t|\t{:.2E}\t\t|\n".format(ga_instance.generations_completed, fitnesses.min(), np.percentile(fitnesses, 50), fitnesses.max()))
+  log_file = open('log.txt', 'a')
+  log_file.write("|\t\t{}\t\t|\t{:.2E}\t\t|\t{:.2E}\t\t|\t{:.2E}\t\t|\n".format(ga_instance.generations_completed, fitnesses.min(), np.percentile(fitnesses, 50), fitnesses.max()))
+  log_file.close()
   ga_instance.save(filename=spike_type)
