@@ -114,7 +114,7 @@ class IzhikevichModel():
         self.Vr = params["Vr"]
         self.Vt = params["Vt"]
         self.Vp = params["Vp"]
-        self.c = params["c"]
+        self.Vmin = params["Vmin"]
         self.dt = .025
         self.v = self.Vr
         self.u = 0
@@ -123,8 +123,8 @@ class IzhikevichModel():
         self.ts = np.array([self.t])
 
         self.amp = params['I']
-        self.delay = 2
-        self.dur = 40
+        self.delay = 10
+        self.dur = 230
         return None
     def I(self, t):
         return self.amp if (t > self.delay) and (t < self.dur + self.delay) else 0
@@ -132,8 +132,8 @@ class IzhikevichModel():
         return (1/self.C)*(self.k*(v-self.Vr)*(v-self.Vt) - u + i)
     def Du(self, v, u):
         return self.a*(self.b*(v-self.Vr) - u)
-    def Initialize(self, v):
-        self.v = v
+    def Initialize(self, v=0):
+        self.v = v if v!=0 else self.Vr
         self.u = 0
         self.t = 0
         self.vs = np.array([self.v])
@@ -143,7 +143,7 @@ class IzhikevichModel():
             tmp_v = self.v
             tmp_u = self.u
             if (self.v >= self.Vp) :
-                self.v = self.c
+                self.v = self.Vmin
                 self.u += self.d
             else:
                 self.v += self.Dv(self.v, self.u, self.I(self.t))*self.dt
@@ -154,7 +154,7 @@ class IzhikevichModel():
     def ContinueRun(self, t_end):
         while (self.t < t_end):
             if (self.v >= self.Vp) :
-                self.v = self.c
+                self.v = self.Vmin
                 self.u += self.d
             else:
                 self.v += self.Dv(self.v, self.u, self.I(self.t))*self.dt

@@ -94,7 +94,7 @@ ga_instance = pygad.GA(num_generations=num_generations,
                       gene_space=gene_space,
                       on_stop=on_stop,
                       keep_elitism=keep_elitism,
-                      parallel_processing=['thread', 16]
+                      parallel_processing=['process', 8]
                       )
 ga_instance.run()
 
