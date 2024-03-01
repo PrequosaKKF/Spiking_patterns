@@ -1,0 +1,212 @@
+
+//**************************************************************//
+//						The Parameters
+//**************************************************************//
+
+load_proc("nrnmainmenu")
+// Set variable time step integration mehod
+objref cvode
+cvode = new CVode()
+cvode.active(1)
+
+tstop = 2000
+steps_per_ms = 40
+dt = 0.025
+stamp=0.20
+
+// --------------------------------------------------------------
+// Resistances and Capacitances
+// --------------------------------------------------------------
+
+ra     = 200			
+rm     = 60000
+c_m       = 0.75
+
+v_init    = -65
+celsius   = 30
+
+// --------------------------------------------------------------
+// Resting potentials
+// --------------------------------------------------------------
+
+
+Ek = -91
+Ena = 50
+Eca = 75
+
+
+//--------------------------------------------------------------
+// Active conductance densities 
+//--------------------------------------------------------------
+
+// Nonbursting Regime
+gna=0.025
+gkdr=0.03
+gkm=0.0001
+
+// Bursting Regime
+gna=0.018
+gkdr=0.0088
+gkm=0.00001
+
+gcal=0.0025
+gcan=0.0028
+gcat=0.00025
+gkahp=0.0003
+gcagk=0.0008
+gh=1e-5
+
+//--------------------------------------------------------------
+
+objref sh, st, apc, vec, g
+strdef str1, str2, str3
+objref DEND
+
+create soma[1], apical[1]
+
+
+/**********************************************************************/
+// Set Passive Conductances 
+
+proc setpassive() {
+	forall {
+	  	insert pas
+	  	cm = c_m 
+	  	e_pas = v_init
+		Ra=ra
+		g_pas=1/rm
+	}
+}
+
+/**********************************************************************/
+// Set Active Conductances 
+
+proc setactive () {local xdist
+
+	forall {
+		insert cadifus
+		insert can 	gcanbar_can=gcan
+		insert cat	gcatbar_cat=gcat
+		insert kahp	gkahpbar_kahp=gkahp
+		insert cagk	gkbar_cagk=gcagk
+		insert nahh gnabar_nahh=gna
+		insert borgkdr gkdrbar_borgkdr=gkdr
+		insert hd 
+
+		xdist=distance(0)
+		ghdbar_hd=gh*(1+1.75*xdist/100)
+
+		if (xdist<50){	
+			insert cal gcalbar_cal=gcal
+		}	
+		if(xdist<100){ 
+			insert kap gbar_kap=1e-3*(7+(11*xdist)/100)
+			insert borgkm  gkmbar_borgkm=gkm
+		} else	{
+			insert kad gbar_kad=1e-3*(7+(11*xdist)/100)
+		}	
+	}
+
+	forall if(ismembrane("k_ion")) ek = Ek
+	forall if(ismembrane("na_ion")) ena = Ena
+	forall if(ismembrane("ca_ion")) eca = Eca
+
+	cai0_ca_ion=50e-6	// 50nM is the initial intracellular Ca
+	cao0_ca_ion=2
+}
+
+/**********************************************************************/
+
+proc init_cell() {
+	setpassive()
+	setactive()
+	print "Total number of compartments: ", totcomp
+
+	current_clamp()
+	finitialize(v_init)
+	fcurrent()
+	
+	forall {
+    	if (ismembrane("nahh")) {
+			e_pas=v+(ina+ik+ica+i_hd)/g_pas
+		} else {
+			e_pas=v+(ik+ica+i_hd)/g_pas
+		}
+    }
+}
+
+/**********************************************************************/
+
+proc load_3dcell() {
+
+// $s1 filename
+
+	forall delete_section()
+	xopen($s1)
+
+	setpassive()
+	// The lambda constraint
+	totcomp=0
+	forall { 
+		soma area(0.5)
+		nseg = int((L/(0.1*lambda_f(100))+.9)/2)*2 + 1  
+		totcomp=totcomp+nseg
+	}
+	access soma[0]
+	distance()
+    coord_cadifus()
+	DEND = new SectionList()
+	forsec "basal" { 
+		DEND.append()
+	}
+	forsec "apical"{
+		DEND.append()
+	}
+	init_cell()
+
+	sh = new PlotShape()
+}
+
+/**********************************************************************/
+
+proc current_clamp(){	
+	st=new IClamp(.5)
+	st.dur = 2000
+	st.del = 50
+	st.amp = stamp
+}
+
+/**********************************************************************/
+
+proc proc_load() {
+	cvode.active(0)
+	cvode.re_init()
+	cvode.active(1)
+	ropen("Neurons.inp")
+	nneu=0
+	while (nneu < $1){
+		getstr(str1,1)
+		nneu=nneu+1
+	}	
+	print str1
+	load_3dcell(str1)
+}	
+
+/**********************************************************************/
+
+proc showgui() {
+	xpanel("Select Neuron")
+	xlabel("Select one of the neurons below")
+	xbutton("0% Atrophy", "proc_load(1)")
+	xbutton("25% Atrophy", "proc_load(2)") // 22%
+	xbutton("35% Atrophy", "proc_load(3)") // 37%
+	xbutton("75% Atrophy", "proc_load(4)") // 74%
+	xpanel()
+}
+
+/**********************************************************************/
+
+showgui()
+nrnmainmenu()
+nrncontrolmenu()
+newPlotV()

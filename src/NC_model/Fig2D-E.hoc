@@ -1,0 +1,204 @@
+load_file("nrngui.hoc")
+create soma[1]
+objectvar st
+objectvar sh
+strdef str1
+
+tstop = 50
+steps_per_ms = 40
+ra     = 200			
+rm     = 60000
+c_m       = 0.75
+
+v_init    = -65
+celsius   = 30
+
+t = 0.025
+
+proc setpassive() {
+	forall {
+	  	insert pas
+	  	cm = c_m 
+	  	e_pas = v_init
+		Ra=ra
+		g_pas=1/rm
+	}
+}
+
+proc load_3dcell() {
+	xopen(str1)
+	setpassive()
+	forall { 
+		soma area(0.5)
+		nseg = (int((L/(0.1*lambda_f(100))+.9)/2)*2 + 1)
+		totcomp=totcomp+nseg
+	}
+	setpassive()
+	access soma[0]
+}	
+
+/*****************************************************************/
+
+objref netlist, s, ampasyn, f1, DEND, sapamp, somavec, sampvec
+strdef  str2
+
+proc find_epsp_amplitudes() {
+	nmdaamparat=0.25
+	atrise=2.0
+	atau=3
+	ntrise=5
+	ntau=50
+
+    netlist=new List()
+
+	
+    ropen("neuron.que")
+	f1=new File()
+	nneu=fscan()
+	stdel=5
+	tstop=50
+    Gstart=1e-5
+    Gend=0.5
+	SET=0
+	while (nneu > 0){
+    	getstr(str1,1)
+		load_3dcell(str1)
+		sprint(str2, "%s.sco",str1)
+		wopen(str2)
+		
+		soma[2] s = new NetStim(0.5)
+    	s.interval=1   // ms (mean) time between spikes
+    	s.number=1     // (average) number of spikes
+    	s.start=2   // ms (mean) start time of first spike
+    	s.noise=0      // range 0 to 1. Fractional randomness.
+		
+		DEND = new SectionList()
+		forsec "basal" { 
+			DEND.append()
+		}
+		forsec "apical"{
+			DEND.append()
+		}
+		access soma[2]
+		distance()
+
+		forsec DEND {
+			for (x) {
+    			G=0.004
+				ampasyn=new AMPA(x)
+				ampasyn.TRise=atrise
+				ampasyn.tau=atau
+				ampasyn.gmax=G
+    			netlist.append(new NetCon(s,ampasyn,1,0,0))
+
+				SOMAMAX=-70
+				DENDMAX=-70
+        		update_init()
+				while (t <tstop){
+                   	fadvance()
+					if(v(x)>DENDMAX) {
+						DENDMAX=v(x)
+					}	
+					if(soma[2].v(0.5)>SOMAMAX) {
+						SOMAMAX=soma[2].v(0.5)
+					}	
+        		}
+				print secname(), " ", x, " ", distance(x), " ", 65+DENDMAX, " ", 65+SOMAMAX
+            	fprint("%f\t%f\t%f\n", distance(x), 65+SOMAMAX, 65+DENDMAX)
+			}
+		}	
+    	wopen()
+		nneu=nneu-1
+	}
+}
+
+/*****************************************************************/
+proc update_init(){
+    finitialize(v_init)
+    fcurrent()
+}	
+
+/*****************************************************************/
+somax=-2.68892  
+somay=13.0872  
+somaz=1.07191
+double distances[200]
+
+proc compute_distances() {
+    ropen("neuron.que")
+	f1=new File()
+	nneu=fscan()
+
+	count=0
+	
+	while (nneu > 0){
+    	getstr(str1,1)
+		sprint(str2, "%s.dis",str1)
+		wopen(str2)
+		load_3dcell(str1)
+		access soma[2]
+		distance()
+		
+		DEND = new SectionList()
+		forsec "basal" { 
+			DEND.append()
+		}
+		forsec "apical"{
+			DEND.append()
+		}
+
+		forsec DEND {
+			distn0=distance(0)
+			distances[0]=0
+			sum=0
+
+			for i=1,n3d()-1 {
+				xx=(x3d(i)-x3d(i-1))*(x3d(i)-x3d(i-1))
+				yy=(y3d(i)-y3d(i-1))*(y3d(i)-y3d(i-1))
+				zz=(z3d(i)-z3d(i-1))*(z3d(i)-z3d(i-1))
+				sum=sum+sqrt(xx+yy+zz)
+				distances[i]=sum
+			}
+
+			for (x) {
+
+// Amoung the various pt3d's find which one matches the distance of
+// current x closely
+
+				distn=distance(x)
+				match=distn-distn0
+				matchptdist=100000
+				for i=0,n3d()-1 {		
+					matptdist=(match-distances[i])*(match-distances[i])
+					if(matchptdist>matptdist){
+						matchptdist=matptdist
+						matchi=i
+					}
+				}
+
+			//print "Match for ", x, " is ", matchi, " XDIST ", match, " MATCH ", distances[matchi], " ERROR ", sqrt(matchptdist)
+
+			
+// Find the distance of the closely matched point to the somatic
+// centroid and use that as the distance for this BPAP measurement			
+
+				xx=(x3d(matchi)-somax)*(x3d(matchi)-somax)
+				yy=(y3d(matchi)-somay)*(y3d(matchi)-somay)
+				zz=(z3d(matchi)-somaz)*(z3d(matchi)-somaz)
+				raddist=sqrt(xx+yy+zz)
+
+				fprint("%s\t%f\n", secname(), raddist) 
+				print secname(), x, raddist
+				count=count+1
+			}	
+		}
+		wopen()
+		nneu=nneu-1
+	}
+}
+
+/*****************************************************************/
+
+find_epsp_amplitudes()
+//compute_distances()
+
