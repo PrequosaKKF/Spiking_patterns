@@ -92,7 +92,7 @@ num_genes = len(solution)
 
 params_limit = {
    'gcatbar'  : np.linspace(0,2.5,5000).tolist(), #um
-   'amp'      : np.linspace(0,50,500).tolist() #um
+   'amp'      : np.linspace(0,50,5000).tolist() #um
 }
 gene_space = np.array(list(params_limit.values()))
 
