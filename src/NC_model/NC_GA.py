@@ -6,19 +6,10 @@ import pygad
 import json
 import os
 
-spike_type = 'FS_NoAdaptation'
 #units: [v] = [v_inf] = mV, [tau] = ms, [g] = uS/mm2, [A] = mm2, [i_ext] = nA, [c] = nF/mm2
 
 delay = 10
 duration = 230
-
-with open("src/Izhikevich_Model_Params.json") as json_file:
-    types_params = json.load(json_file)
-iz = IzhikevichModel(types_params[spike_type])
-iz.dur = duration
-iz.delay = delay
-iz.Initialize(-65*mV)
-iz.ContinueRun(250*ms)
 
 v_init = -65 * mV
 
