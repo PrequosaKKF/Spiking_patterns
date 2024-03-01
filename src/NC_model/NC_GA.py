@@ -11,6 +11,9 @@ duration = 230
 
 v_init = -65 * mV
 
+gna=0.025
+gkdr=0.03
+gkm=0.0001
 gcal=0.0025
 gcan=0.0028
 gcat=.00025
