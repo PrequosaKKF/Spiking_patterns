@@ -104,13 +104,10 @@ crossover_type = "single_point"
 
 mutation_type = "random"
 
-def on_gen(ga_instance):
+def on_stop(ga_instance, last_population_fitness):
   print(ga_instance.best_solution())
   ga_instance.last_generation_parents.tofile('parents.csv')
   ga_instance.last_generation_fitness.tofile('fitness.csv')
-
-def on_stop(ga_instance, last_population_fitness):
-  print(ga_instance.best_solution())
 
 ga_instance = pygad.GA(num_generations=num_generations,
                       num_parents_mating=num_parents_mating,

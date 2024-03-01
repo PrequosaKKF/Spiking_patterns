@@ -45,12 +45,12 @@ def fitness_func(ga_instance, solution, solution_idx):
   fitness = 1e3-np.mean(np.abs(vs_hh - vs_tg))
   return fitness
     
-num_generations = 10
-num_parents_mating = 60
+num_generations = 2
+num_parents_mating = 5
 
 fitness_function = fitness_func
 
-sol_per_pop = 100
+sol_per_pop = 10
 solution = [20, 20, .036, .12, .0003, 1, 0]
 initial_population = [solution for i in range(sol_per_pop)]
 num_genes = len(solution)
@@ -67,8 +67,8 @@ params_limit = {
 gene_space = np.array(list(params_limit.values()))
 
 parent_selection_type = "sus"
-keep_parents = 10
-keep_elitism = 5
+keep_parents = 3
+keep_elitism = 2
 
 crossover_type = "single_point"
 
@@ -79,6 +79,8 @@ def on_gen(ga_instance):
 
 def on_stop(ga_instance, last_population_fitness):
   print(ga_instance.best_solution())
+  ga_instance.last_generation_parents.tofile('parents.csv')
+  print(ga_instance.last_generation_fitness)
 
 ga_instance = pygad.GA(num_generations=num_generations,
                       num_parents_mating=num_parents_mating,
