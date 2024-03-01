@@ -1,0 +1,196 @@
+
+/home/kanisorn/.local/lib/python3.10/site-packages/matplotlib/projections/__init__.py:63: UserWarning: Unable to import Axes3D. This may be due to multiple versions of Matplotlib being installed (e.g. as a system package and as a pip package). As a result, the 3D projection is not available.
+  warnings.warn("Unable to import Axes3D. This may be due to multiple versions of "
+/home/kanisorn/.local/lib/python3.10/site-packages/pygad/pygad.py:728: UserWarning: The percentage of genes to mutate (mutation_percent_genes=10) resutled in selecting (0) genes. The number of genes to mutate is set to 1 (mutation_num_genes=1).
+If you do not want to mutate any gene, please set mutation_type=None.
+  warnings.warn(
+(array([0.0260052, 5.       ]), 999.6252157067652, 0)
+(array([5.0010002e-04, 5.0000000e+00]), 999.9170320332357, 0)
+(array([5.0010002e-04, 5.0000000e+00]), 999.9170320332357, 0)
+(array([0., 5.]), 999.9994639997267, 0)
+(array([0., 5.]), 999.9994639997267, 0)
+(array([0., 5.]), 999.9994639997267, 0)
+(array([0., 5.]), 999.9994639997267, 0)
+(array([0., 5.]), 999.9994639997267, 0)
+(array([0., 5.]), 999.9994639997267, 0)
+(array([0., 5.]), 999.9994639997267, 0)
+(array([0., 5.]), 999.9994639997267, 0)
+(array([0., 5.]), 999.9994639997267, 0)
+(array([0., 5.]), 999.9994639997267, 0)
+(array([0., 5.]), 999.9994639997267, 0)
+(array([0., 5.]), 999.9994639997267, 0)
+(array([0., 5.]), 999.9994639997267, 0)
+(array([0., 5.]), 999.9994639997267, 0)
+(array([0., 5.]), 999.9994639997267, 0)
+(array([0., 5.]), 999.9994639997267, 0)
+(array([0., 5.]), 999.9994639997267, 0)
+(array([0., 5.]), 999.9994639997267, 0)
+(array([0., 5.]), 999.9994639997267, 0)
+(array([0., 5.]), 999.9994639997267, 0)
+(array([0., 5.]), 999.9994639997267, 0)
+(array([0., 5.]), 999.9994639997267, 0)
+(array([0., 5.]), 999.9994639997267, 0)
+(array([0., 5.]), 999.9994639997267, 0)
+(array([0., 5.]), 999.9994639997267, 0)
+(array([0., 5.]), 999.9994639997267, 0)
+(array([0., 5.]), 999.9994639997267, 0)
+(array([0., 5.]), 999.9994639997267, 0)
+(array([0., 5.]), 999.9994639997267, 0)
+(array([0., 5.]), 999.9994639997267, 0)
+(array([0., 5.]), 999.9994639997267, 0)
+(array([0., 5.]), 999.9994639997267, 0)
+(array([0., 5.]), 999.9994639997267, 0)
+(array([0., 5.]), 999.9994639997267, 0)
+(array([0., 5.]), 999.9994639997267, 0)
+(array([0., 5.]), 999.9994639997267, 0)
+(array([0., 5.]), 999.9994639997267, 0)
+(array([0., 5.]), 999.9994639997267, 0)
+(array([0., 5.]), 999.9994639997267, 0)
+(array([0., 5.]), 999.9994639997267, 0)
+(array([0., 5.]), 999.9994639997267, 0)
+(array([0., 5.]), 999.9994639997267, 0)
+(array([0., 5.]), 999.9994639997267, 0)
+(array([0., 5.]), 999.9994639997267, 0)
+(array([0., 5.]), 999.9994639997267, 0)
+(array([0., 5.]), 999.9994639997267, 0)
+(array([0., 5.]), 999.9994639997267, 0)
+(array([0., 5.]), 999.9994639997267, 0)
+(array([0., 5.]), 999.9994639997267, 0)
+(array([0., 5.]), 999.9994639997267, 0)
+(array([0., 5.]), 999.9994639997267, 0)
+(array([0., 5.]), 999.9994639997267, 0)
+(array([0., 5.]), 999.9994639997267, 0)
+(array([0., 5.]), 999.9994639997267, 0)
+(array([0., 5.]), 999.9994639997267, 0)
+(array([0., 5.]), 999.9994639997267, 0)
+(array([0., 5.]), 999.9994639997267, 0)
+(array([0., 5.]), 999.9994639997267, 0)
+/home/kanisorn/.local/lib/python3.10/site-packages/matplotlib/projections/__init__.py:63: UserWarning: Unable to import Axes3D. This may be due to multiple versions of Matplotlib being installed (e.g. as a system package and as a pip package). As a result, the 3D projection is not available.
+  warnings.warn("Unable to import Axes3D. This may be due to multiple versions of "
+/home/kanisorn/.local/lib/python3.10/site-packages/pygad/pygad.py:728: UserWarning: The percentage of genes to mutate (mutation_percent_genes=10) resutled in selecting (0) genes. The number of genes to mutate is set to 1 (mutation_num_genes=1).
+If you do not want to mutate any gene, please set mutation_type=None.
+  warnings.warn(
+(array([0.0335067, 5.       ]), 999.683666505958, 0)
+(array([0.0295059, 5.       ]), 999.9542025344674, 54)
+(array([0.0295059, 5.       ]), 999.9542025344674, 0)
+(array([0.0295059, 5.       ]), 999.9542025344674, 0)
+(array([0.0295059, 5.       ]), 999.9542025344674, 0)
+(array([0.0295059, 5.       ]), 999.9542025344674, 0)
+(array([0.0295059, 5.       ]), 999.9542025344674, 0)
+(array([0.0295059, 5.       ]), 999.9542025344674, 0)
+(array([0.0295059, 5.       ]), 999.9542025344674, 0)
+(array([0.0295059, 5.       ]), 999.9542025344674, 0)
+(array([0.0295059, 5.       ]), 999.9542025344674, 0)
+(array([0.0295059, 5.       ]), 999.9542025344674, 0)
+(array([0.0295059, 5.       ]), 999.9542025344674, 0)
+(array([0.0295059, 5.       ]), 999.9542025344674, 0)
+(array([0.0295059, 5.       ]), 999.9542025344674, 0)
+(array([0.0295059, 5.       ]), 999.9542025344674, 0)
+(array([0.0295059, 5.       ]), 999.9542025344674, 0)
+(array([0.0295059, 5.       ]), 999.9542025344674, 0)
+(array([0.0295059, 5.       ]), 999.9542025344674, 0)
+(array([0.0295059, 5.       ]), 999.9542025344674, 0)
+(array([0.0295059, 5.       ]), 999.9542025344674, 0)
+(array([0.0295059, 5.       ]), 999.9542025344674, 0)
+(array([0.0295059, 5.       ]), 999.9542025344674, 0)
+(array([0.0295059, 5.       ]), 999.9542025344674, 0)
+(array([0.0295059, 5.       ]), 999.9542025344674, 0)
+(array([0.0295059, 5.       ]), 999.9542025344674, 0)
+(array([0.0295059, 5.       ]), 999.9542025344674, 0)
+(array([0.0295059, 5.       ]), 999.9542025344674, 0)
+(array([0.0295059, 5.       ]), 999.9542025344674, 0)
+(array([0.0295059, 5.       ]), 999.9542025344674, 0)
+(array([0.0295059, 5.       ]), 999.9542025344674, 0)
+(array([0.0295059, 5.       ]), 999.9542025344674, 0)
+(array([0.0295059, 5.       ]), 999.9542025344674, 0)
+(array([0.0295059, 5.       ]), 999.9542025344674, 0)
+(array([0.0295059, 5.       ]), 999.9542025344674, 0)
+(array([0.0295059, 5.       ]), 999.9542025344674, 0)
+(array([0.0295059, 5.       ]), 999.9542025344674, 0)
+(array([0.0295059, 5.       ]), 999.9542025344674, 0)
+(array([0.0295059, 5.       ]), 999.9542025344674, 0)
+(array([0.0295059, 5.       ]), 999.9542025344674, 0)
+(array([0.0295059, 5.       ]), 999.9542025344674, 0)
+(array([0.0295059, 5.       ]), 999.9542025344674, 0)
+(array([0.0295059, 5.       ]), 999.9542025344674, 0)
+(array([0.0295059, 5.0010002]), 999.9546299740307, 0)
+(array([0.0295059, 5.0010002]), 999.9546299740307, 0)
+(array([0.0295059, 5.0010002]), 999.9546299740307, 0)
+(array([0.0295059, 5.0010002]), 999.9546299740307, 0)
+(array([0.0295059, 5.0010002]), 999.9546299740307, 0)
+(array([0.0295059, 5.0010002]), 999.9546299740307, 0)
+(array([0.0295059, 5.0010002]), 999.9546299740307, 0)
+(array([0.0295059, 5.0010002]), 999.9546299740307, 0)
+(array([0.0295059, 5.0010002]), 999.9546299740307, 0)
+(array([0.0295059, 5.0010002]), 999.9546299740307, 0)
+(array([0.0295059, 5.0010002]), 999.9546299740307, 0)
+(array([0.0295059, 5.0010002]), 999.9546299740307, 0)
+(array([0.0295059, 5.0010002]), 999.9546299740307, 0)
+(array([0.0295059, 5.0010002]), 999.9546299740307, 0)
+(array([0.0295059, 5.0010002]), 999.9546299740307, 0)
+(array([0.0295059, 5.0010002]), 999.9546299740307, 0)
+(array([0.0295059, 5.0010002]), 999.9546299740307, 0)
+(array([0.0295059, 5.0010002]), 999.9546299740307, 0)
+(array([0.0295059, 5.0010002]), 999.9546299740307, 0)
+(array([0.0295059, 5.0010002]), 999.9546299740307, 0)
+(array([0.0295059, 5.0010002]), 999.9546299740307, 0)
+(array([0.0295059, 5.0010002]), 999.9546299740307, 0)
+(array([0.0295059, 5.0010002]), 999.9546299740307, 0)
+(array([0.0295059, 5.0010002]), 999.9546299740307, 0)
+(array([0.       , 5.0410082]), 999.9655433541243, 0)
+(array([0.       , 5.0410082]), 999.9655433541243, 0)
+(array([0.       , 5.0410082]), 999.9655433541243, 0)
+/home/kanisorn/.local/lib/python3.10/site-packages/matplotlib/projections/__init__.py:63: UserWarning: Unable to import Axes3D. This may be due to multiple versions of Matplotlib being installed (e.g. as a system package and as a pip package). As a result, the 3D projection is not available.
+  warnings.warn("Unable to import Axes3D. This may be due to multiple versions of "
+Traceback (most recent call last):
+  File "/home/kanisorn/Documents/Defining spiking patterns/Spiking_patterns/src/NC_model/NC_GA.py", line 7, in <module>
+    spike_type = input()
+OSError: [Errno 9] Bad file descriptor
+/home/kanisorn/.local/lib/python3.10/site-packages/matplotlib/projections/__init__.py:63: UserWarning: Unable to import Axes3D. This may be due to multiple versions of Matplotlib being installed (e.g. as a system package and as a pip package). As a result, the 3D projection is not available.
+  warnings.warn("Unable to import Axes3D. This may be due to multiple versions of "
+Traceback (most recent call last):
+  File "/home/kanisorn/Documents/Defining spiking patterns/Spiking_patterns/src/NC_model/NC_GA.py", line 92, in <module>
+    num_genes = len(solution)
+NameError: name 'solution' is not defined
+/home/kanisorn/.local/lib/python3.10/site-packages/matplotlib/projections/__init__.py:63: UserWarning: Unable to import Axes3D. This may be due to multiple versions of Matplotlib being installed (e.g. as a system package and as a pip package). As a result, the 3D projection is not available.
+  warnings.warn("Unable to import Axes3D. This may be due to multiple versions of "
+Traceback (most recent call last):
+  File "/home/kanisorn/Documents/Defining spiking patterns/Spiking_patterns/src/NC_model/NC_GA.py", line 74, in <module>
+    vs_tg = np.fromfile("{}.csv".format(spike_type)).reshape((10,10001))
+FileNotFoundError: [Errno 2] No such file or directory: '-i.csv'
+/home/kanisorn/.local/lib/python3.10/site-packages/matplotlib/projections/__init__.py:63: UserWarning: Unable to import Axes3D. This may be due to multiple versions of Matplotlib being installed (e.g. as a system package and as a pip package). As a result, the 3D projection is not available.
+  warnings.warn("Unable to import Axes3D. This may be due to multiple versions of "
+Traceback (most recent call last):
+  File "/home/kanisorn/Documents/Defining spiking patterns/Spiking_patterns/src/NC_model/NC_GA.py", line 92, in <module>
+    num_genes = len(solution)
+NameError: name 'solution' is not defined
+/home/kanisorn/.local/lib/python3.10/site-packages/matplotlib/projections/__init__.py:63: UserWarning: Unable to import Axes3D. This may be due to multiple versions of Matplotlib being installed (e.g. as a system package and as a pip package). As a result, the 3D projection is not available.
+  warnings.warn("Unable to import Axes3D. This may be due to multiple versions of "
+Traceback (most recent call last):
+  File "/home/kanisorn/Documents/Defining spiking patterns/Spiking_patterns/src/NC_model/NC_GA.py", line 92, in <module>
+    num_genes = len(solution)
+NameError: name 'solution' is not defined
+/home/kanisorn/.local/lib/python3.10/site-packages/matplotlib/projections/__init__.py:63: UserWarning: Unable to import Axes3D. This may be due to multiple versions of Matplotlib being installed (e.g. as a system package and as a pip package). As a result, the 3D projection is not available.
+  warnings.warn("Unable to import Axes3D. This may be due to multiple versions of "
+/home/kanisorn/.local/lib/python3.10/site-packages/pygad/pygad.py:728: UserWarning: The percentage of genes to mutate (mutation_percent_genes=10) resutled in selecting (0) genes. The number of genes to mutate is set to 1 (mutation_num_genes=1).
+If you do not want to mutate any gene, please set mutation_type=None.
+  warnings.warn(
+Traceback (most recent call last):
+  File "/home/kanisorn/Documents/Defining spiking patterns/Spiking_patterns/src/NC_model/NC_GA.py", line 130, in <module>
+    ga_instance.run()
+  File "/home/kanisorn/.local/lib/python3.10/site-packages/pygad/pygad.py", line 2062, in run
+    self.last_generation_offspring_mutation = self.mutation(self.last_generation_offspring_crossover)
+  File "/home/kanisorn/.local/lib/python3.10/site-packages/pygad/utils/mutation.py", line 32, in random_mutation
+    offspring = self.mutation_by_space(offspring)
+  File "/home/kanisorn/.local/lib/python3.10/site-packages/pygad/utils/mutation.py", line 106, in mutation_by_space
+    values_to_select_from = list(set(curr_gene_space) - set([offspring[offspring_idx, gene_idx]]))
+KeyboardInterrupt
+/home/kanisorn/.local/lib/python3.10/site-packages/matplotlib/projections/__init__.py:63: UserWarning: Unable to import Axes3D. This may be due to multiple versions of Matplotlib being installed (e.g. as a system package and as a pip package). As a result, the 3D projection is not available.
+  warnings.warn("Unable to import Axes3D. This may be due to multiple versions of "
+/home/kanisorn/.local/lib/python3.10/site-packages/pygad/pygad.py:728: UserWarning: The percentage of genes to mutate (mutation_percent_genes=10) resutled in selecting (0) genes. The number of genes to mutate is set to 1 (mutation_num_genes=1).
+If you do not want to mutate any gene, please set mutation_type=None.
+  warnings.warn(
+(array([0.03291557, 4.27085417]), 999.3390685876576, 74)
+(array([0.03291557, 4.27085417]), 999.3390685876576, 0)
+(array([0.03291557, 4.27085417]), 999.3390685876576, 0)
+(array([0.03291557, 5.0910182 ]), 999.6873572011929, 0)

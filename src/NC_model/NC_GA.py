@@ -4,6 +4,7 @@ from neuron.units import ms, mV
 import pygad
 import os
 
+spike_type = 'SB'
 #units: [v] = [v_inf] = mV, [tau] = ms, [g] = uS/mm2, [A] = mm2, [i_ext] = nA, [c] = nF/mm2
 
 delay = 10
@@ -27,13 +28,15 @@ Eca = 75
 
 Ra = 200
 cm = 0.75
+
 soma = nr.h.Section(name="soma")
 soma.Ra = Ra
 soma.cm = cm
+soma.diam=35
+soma.L=20
 soma.insert('pas')
 soma.e_pas=v_init
 soma.g_pas=1/6e4
-
 soma.insert('cadifus')
 soma.insert('can')
 soma.gcanbar_can=gcan
@@ -60,8 +63,7 @@ soma.gbar_kad=1e-3*(7+11*soma.L/100)
 soma.ek = Ek
 soma.ena = Ena
 soma.eca = Eca
-soma.diam=35
-soma.L=20
+
 iclamp = nr.h.IClamp(soma(0.5))
 iclamp.delay = delay
 iclamp.dur = duration
@@ -69,7 +71,7 @@ nr.h.load_file("stdrun.hoc")
 v = nr.h.Vector().record(soma(0.5)._ref_v)
 t = nr.h.Vector().record(nr.h._ref_t)
 
-vs_tg = np.fromfile("SB.csv").reshape((3,10001))
+vs_tg = np.fromfile("{}.csv".format(spike_type)).reshape((10,10001))
 
 def fitness_func(ga_instance, solution, solution_idx):
   soma.gcatbar_cat=solution[0]
@@ -86,9 +88,8 @@ num_parents_mating = 60
 fitness_function = fitness_func
 
 sol_per_pop = 100
-solution = [0.0025,5]
-initial_population = [solution for i in range(sol_per_pop)]
-num_genes = len(solution)
+initial_population = np.abs(np.random.randn(100,2))
+num_genes = 2
 
 params_limit = {
    'gcatbar'  : np.linspace(0,2.5,5000).tolist(), #um
@@ -106,8 +107,8 @@ mutation_type = "random"
 
 def on_stop(ga_instance, last_population_fitness):
   print(ga_instance.best_solution())
-  ga_instance.last_generation_parents.tofile('parents.csv')
-  ga_instance.last_generation_fitness.tofile('fitness.csv')
+  ga_instance.last_generation_parents.tofile('parents_{}.csv'.format(spike_type))
+  ga_instance.last_generation_elitism.tofile('elites_{}.csv'.format(spike_type))
 
 ga_instance = pygad.GA(num_generations=num_generations,
                       num_parents_mating=num_parents_mating,
@@ -123,7 +124,8 @@ ga_instance = pygad.GA(num_generations=num_generations,
                       gene_space=gene_space,
                       on_stop=on_stop,
                       keep_elitism=keep_elitism,
-                      parallel_processing=['process', 8]
+                      parallel_processing=['process', 8],
+                      allow_duplicate_genes=False
                       )
 ga_instance.run()
 
