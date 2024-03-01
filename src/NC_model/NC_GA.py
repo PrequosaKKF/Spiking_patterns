@@ -1,9 +1,7 @@
 import numpy as np
-from model import *
 import neuron as nr
 from neuron.units import ms, mV
 import pygad
-import json
 import os
 
 #units: [v] = [v_inf] = mV, [tau] = ms, [g] = uS/mm2, [A] = mm2, [i_ext] = nA, [c] = nF/mm2
