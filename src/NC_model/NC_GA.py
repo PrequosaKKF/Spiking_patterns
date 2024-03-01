@@ -105,6 +105,8 @@ mutation_type = "random"
 
 def on_gen(ga_instance):
   print(ga_instance.best_solution())
+  ga_instance.last_generation_parents.tofile('parents.csv')
+  ga_instance.last_generation_fitness.tofile('fitness.csv')
 
 def on_stop(ga_instance, last_population_fitness):
   print(ga_instance.best_solution())
