@@ -69,7 +69,7 @@ nr.h.load_file("stdrun.hoc")
 v = nr.h.Vector().record(soma(0.5)._ref_v)
 t = nr.h.Vector().record(nr.h._ref_t)
 
-vs_tg = np.fromfile("SB.csv")
+vs_tg = np.fromfile("SB.csv").reshape((3,10001))
 
 def fitness_func(ga_instance, solution, solution_idx):
   soma.gcatbar_cat=solution[0]
