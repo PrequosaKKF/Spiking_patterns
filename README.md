@@ -1,1 +1,0 @@
-# Spiking_patterns
