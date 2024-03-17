@@ -8,7 +8,7 @@ import h5py
 
 #units: [v] = [v_inf] = mV, [tau] = ms, [g] = uS/mm2, [A] = mm2, [i_ext] = nA, [c] = nF/mm2
 G = sys.argv[1]
-f = h5py.File('base', 'w')
+f = h5py.File('base', 'r+')
 delay = 200
 duration = 600
 
