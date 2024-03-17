@@ -85,7 +85,7 @@ for i in range(len(gbars)):
         soma.gkdrbar_borgkdr=gbars[i] if G == 'borgkdr' else gkdr
         soma.ghdbar_hd=gbars[i] if G == 'hd' else gh*(1+1.75*soma.L/100)
         soma.gcalbar_cal=gbars[i] if G == 'cal' else gcal
-        soma.gbar_kap=gbars[i] if G == 'kap' else 1e-3(7+11*soma.L/100)
+        soma.gbar_kap=gbars[i] if G == 'kap' else 1e-3*(7+11*soma.L/100)
         soma.gbar_kad=gbars[i] if G == 'kad' else 1e-3*(7+11*soma.L/100)
 
         iclamp.amp=amps[j]
