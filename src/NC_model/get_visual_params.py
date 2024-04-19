@@ -3,19 +3,21 @@ import numpy as np
 from neuron.units import mV, ms
 from IdenTools import *
 
-DATAFILE = h5py.File('home/g6234203723/Spiking_patterns/src/NC_model/dataset/twoparams.hdf5','r')
-SAVEFILE = h5py.File('home/g6234203723/Spiking_patterns/src/NC_model/dataset/twoparams_prop.hdf5','r+')
+DATAFILE = h5py.File('/home/g6234203723/Spiking_patterns/src/NC_model/dataset/twoparam.hdf5','r')
+SAVEFILE = h5py.File('/home/g6234203723/Spiking_patterns/src/NC_model/dataset/twoparam_prop.hdf5','w')
 
 conds = ['borgkdr', 'cagk', 'cal', 'cat', 'can', 'hd', 'kad', 'kahp', 'kap', 'nahh']
 ts = np.linspace(0,1000,40001)
 for cond in conds:
+    SAVEFILE.create_dataset(cond, (100,100,1000), dtype="float64")
     for i in range(100):
         for j in range(100):
             SAVEFILE[cond][i,j] = GetProp(ts, DATAFILE[cond][i,j])
+    print(cond + " DONE!")
 
 '''
-DATAFILE = h5py.File('home/g6234203723/Spiking_patterns/src/NC_model/dataset/threeparams.hdf5','r')
-SAVEFILE = h5py.File('home/g6234203723/Spiking_patterns/src/NC_model/dataset/threeparams_prop.hdf5','r+')
+DATAFILE = h5py.File('/home/g6234203723/Spiking_patterns/src/NC_model/dataset/threeparams.hdf5','r')
+SAVEFILE = h5py.File('/home/g6234203723/Spiking_patterns/src/NC_model/dataset/threeparams_prop.hdf5','r+')
 
 conds = [['borgkdr_cagk',
  'borgkdr_cal',
