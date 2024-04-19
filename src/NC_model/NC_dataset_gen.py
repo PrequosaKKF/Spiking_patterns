@@ -1,13 +1,10 @@
 import numpy as np
 import neuron as nr
 from neuron.units import ms, mV
-import pygad
-import os
-import sys
 import h5py
 
 #units: [v] = [v_inf] = mV, [tau] = ms, [g] = uS/mm2, [A] = mm2, [i_ext] = nA, [c] = nF/mm2
-f = h5py.File('./dataset/threeparams.hdf5', 'r+')
+f = h5py.File('/home/g6234203723/Spiking_patterns/dataset/threeparams.hdf5', 'w')
 delay = 200
 duration = 600
 
@@ -74,37 +71,82 @@ t = nr.h.Vector().record(nr.h._ref_t)
 
 gbars = np.logspace(-4,0,20)
 amps = np.logspace(-2,2,20)
-ion_ch_list = ['cat','can','kahp','cagk','nahh','borgkdr','hd','cal','kap','kad']
+conds = ['borgkdr_cagk',
+ 'borgkdr_cal',
+ 'borgkdr_cat',
+ 'borgkdr_can',
+ 'borgkdr_hd',
+ 'borgkdr_kad',
+ 'borgkdr_kahp',
+ 'borgkdr_kap',
+ 'borgkdr_nahh',
+ 'cagk_cal',
+ 'cagk_cat',
+ 'cagk_can',
+ 'cagk_hd',
+ 'cagk_kad',
+ 'cagk_kahp',
+ 'cagk_kap',
+ 'cagk_nahh',
+ 'cal_cat',
+ 'cal_can',
+ 'cal_hd',
+ 'cal_kad',
+ 'cal_kahp',
+ 'cal_kap',
+ 'cal_nahh',
+ 'cat_can',
+ 'cat_hd',
+ 'cat_kad',
+ 'cat_kahp',
+ 'cat_kap',
+ 'cat_nahh',
+ 'can_hd',
+ 'can_kad',
+ 'can_kahp',
+ 'can_kap',
+ 'can_nahh',
+ 'hd_kad',
+ 'hd_kahp',
+ 'hd_kap',
+ 'hd_nahh',
+ 'kad_kahp',
+ 'kad_kap',
+ 'kad_nahh',
+ 'kahp_kap',
+ 'kahp_nahh',
+ 'kap_nahh']
 
-for G in tuple(ion_ch_list):
-    ion_ch_list.pop(0)
-    for Gc in ion_ch_list:
-        for i in range(len(gbars)):
-            for j in range(len(gbars)):
-                for k in range(len(amps)):
-                    soma.gcanbar_can=gbars[i] if G == 'can' else gcan
-                    soma.gkahpbar_kahp=gbars[i] if G == 'kahp' else gkahp
-                    soma.gkbar_cagk=gbars[i] if G == 'cagk' else gcagk
-                    soma.gnabar_nahh=gbars[i] if G == 'nahh' else gna
-                    soma.gkdrbar_borgkdr=gbars[i] if G == 'borgkdr' else gkdr
-                    soma.ghdbar_hd=gbars[i] if G == 'hd' else gh*(1+1.75*soma.L/100)
-                    soma.gcalbar_cal=gbars[i] if G == 'cal' else gcal
-                    soma.gbar_kap=gbars[i] if G == 'kap' else 1e-3*(7+11*soma.L/100)
-                    soma.gbar_kad=gbars[i] if G == 'kad' else 1e-3*(7+11*soma.L/100)
-                    
-                    soma.gcanbar_can=gbars[j] if Gc == 'can' else gcan
-                    soma.gkahpbar_kahp=gbars[j] if Gc == 'kahp' else gkahp
-                    soma.gkbar_cagk=gbars[j] if Gc == 'cagk' else gcagk
-                    soma.gnabar_nahh=gbars[j] if Gc == 'nahh' else gna
-                    soma.gkdrbar_borgkdr=gbars[j] if Gc == 'borgkdr' else gkdr
-                    soma.ghdbar_hd=gbars[j] if Gc == 'hd' else gh*(1+1.75*soma.L/100)
-                    soma.gcalbar_cal=gbars[j] if Gc == 'cal' else gcal
-                    soma.gbar_kap=gbars[j] if Gc == 'kap' else 1e-3*(7+11*soma.L/100)
-                    soma.gbar_kad=gbars[j] if Gc == 'kad' else 1e-3*(7+11*soma.L/100)
+for cond in conds:
+    G, Gc = cond.split('_')
+    for i in range(len(gbars)):
+        for j in range(len(gbars)):
+            for k in range(len(amps)):
+                soma.gcatbar_cat=gbars[i] if G == 'cat' else gcat
+                soma.gcanbar_can=gbars[i] if G == 'can' else gcan
+                soma.gkahpbar_kahp=gbars[i] if G == 'kahp' else gkahp
+                soma.gkbar_cagk=gbars[i] if G == 'cagk' else gcagk
+                soma.gnabar_nahh=gbars[i] if G == 'nahh' else gna
+                soma.gkdrbar_borgkdr=gbars[i] if G == 'borgkdr' else gkdr
+                soma.ghdbar_hd=gbars[i] if G == 'hd' else gh*(1+1.75*soma.L/100)
+                soma.gcalbar_cal=gbars[i] if G == 'cal' else gcal
+                soma.gbar_kap=gbars[i] if G == 'kap' else 1e-3*(7+11*soma.L/100)
+                soma.gbar_kad=gbars[i] if G == 'kad' else 1e-3*(7+11*soma.L/100)
+                
+                soma.gcatbar_cat=gbars[j] if Gc == 'cat' else gcat
+                soma.gcanbar_can=gbars[j] if Gc == 'can' else gcan
+                soma.gkahpbar_kahp=gbars[j] if Gc == 'kahp' else gkahp
+                soma.gkbar_cagk=gbars[j] if Gc == 'cagk' else gcagk
+                soma.gnabar_nahh=gbars[j] if Gc == 'nahh' else gna
+                soma.gkdrbar_borgkdr=gbars[j] if Gc == 'borgkdr' else gkdr
+                soma.ghdbar_hd=gbars[j] if Gc == 'hd' else gh*(1+1.75*soma.L/100)
+                soma.gcalbar_cal=gbars[j] if Gc == 'cal' else gcal
+                soma.gbar_kap=gbars[j] if Gc == 'kap' else 1e-3*(7+11*soma.L/100)
+                soma.gbar_kad=gbars[j] if Gc == 'kad' else 1e-3*(7+11*soma.L/100)
 
-                    iclamp.amp=amps[k]
-                    nr.h.finitialize(-65 * mV)
-                    nr.h.continuerun(1000 * ms)
-                    f["{}v{}".format(G,Gc)][i,j,k] = v.as_numpy()
+                iclamp.amp=amps[k]
+                nr.h.finitialize(-65 * mV)
+                nr.h.continuerun(1000 * ms)
+                f["{}v{}".format(G,Gc)][i,j,k] = v.as_numpy()
         print("run for {}v{} ion channel, prog:{}/100".format(G,Gc,i))
 f.close()
