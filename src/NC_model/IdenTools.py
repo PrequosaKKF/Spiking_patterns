@@ -16,19 +16,20 @@ def LocalAverage(array, num_points):
         local_mean += (array[i + num_points] - array[i])/num_points
         res[i] = local_mean
     return res
-def IsZero(arg, array):
-    leftarg = arg - 1 if arg >= 1 else 0
-    rightarg = arg + 1 if arg + 1 < len(array) else len(array) - 1
-    passzero = np.sign(array[leftarg]) != np.sign(array[rightarg])
-    norm_arr = np.abs(array)
-    ismin = (norm_arr[arg] == np.min(norm_arr[leftarg:rightarg+1]))
-    return ismin & (passzero or abs(array[arg]) < 1e-10)
+def IsZero(array):
+    leftarr = np.concatenate(([array[0]], array[:-1]))
+    rightarr = np.concatenate((array[1:], [array[-1]]))
+    norm_array = np.abs(array)
+    ismin = (norm_array < np.abs(leftarr)) & (norm_array < np.abs(rightarr))
+    passzero = np.sign(leftarr) != np.sign(rightarr)
+    tiny = np.abs(array) < 1e-10
+    return ismin & (passzero | tiny)
 
 def SummitAndTrough(ts,vs,SPIKE_DIFF=20):
     dvs = np.concatenate((np.nan, (vs[2:] - vs[:-2])/2, np.nan), axis=None)
     ddvs = np.concatenate((np.nan, (dvs[2:] - dvs[:-2])/2, np.nan), axis=None)
     inert = vs - LocalAverage(vs,500) <= SPIKE_DIFF
-    extreme = [IsZero(i,dvs) for i in range(len(dvs))]
+    extreme = IsZ(dvs)
     up = (ddvs < 0*mV)
     summit_cond = ~inert & extreme & up
     trough_cond =  extreme & ~up
