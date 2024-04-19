@@ -45,7 +45,9 @@ def SummitAndTrough(ts,vs,SPIKE_DIFF=SPIKE_DIFF):
     trough_cond =  extreme & ~up
     return summit_cond, trough_cond
 def SpikeTime(ts,summit_cond):
-    return ts[summit_cond]
+    spts = ts[summit_cond]
+    spts = spts[(spts > START_TIME) & (spts < STOP_TIME)]
+    return spts
 def FirstSpikeLatency(ts_spike, START_TIME=200):
     try: assert np.shape(ts_spike)[0] != 0
     except: return -1
@@ -75,8 +77,7 @@ def GetProp(ts, vs):
 def HasDelay(delay, isis, DELAY_FACTOR=2):
     return True if delay > (isis[0] + isis[-1])*DELAY_FACTOR/2 else False
 def HasTSWBorTSTUT(isis, swa, pss, PRE_FACTOR=2.5, POST_FACTOR=1.5, HIGH_FREQ=25, MIN_SWA=5):
-    
-    for i in [0,1,2,3,4]:
+    for i in [2,3,4]:
         try:
             if (isis[i] > isis[i-1]*PRE_FACTOR) & (isis[i] > isis[i+1]*POST_FACTOR) & \
             (np.mean(isis[i:]) > np.mean(isis[:i-1]) * PRE_FACTOR) & \
@@ -85,23 +86,25 @@ def HasTSWBorTSTUT(isis, swa, pss, PRE_FACTOR=2.5, POST_FACTOR=1.5, HIGH_FREQ=25
                 return True, isis
             elif (pss > isis[-1]*PRE_FACTOR) & np.all(1e3/isis[:i] >= HIGH_FREQ) & (swa > MIN_SWA):
                 return True, isis
-            else:
-                return False, isis
         except:
-            pass
+            if (pss > isis[-1]*PRE_FACTOR) & np.all(1e3/isis[:] >= HIGH_FREQ) & (swa > MIN_SWA):
+                return True, isis
+    return False, isis
 def HasTSWB(swa, MIN_SWA=5):
     if swa > MIN_SWA: return True
     else: return False
-def RunSolverStatTests(fsl, isis, START_TIME=START_TIME, ALPHA=0.005, RAPID=0.2, INERT=0.03):
+def RunSolverStatTests(fsl, isis, START_TIME=START_TIME, ALPHA=0.005, RAPID=0.2, INERT=0.003):
     try: assert len(isis) >= 3
     except: return False
     spts = START_TIME + fsl + np.concatenate(([0], np.cumsum(isis)))
     fs = 1e3/isis
     pw = pwlf.PiecewiseLinFit(spts[:-1], fs)
     pw.fit(1)
-    a, b, rss1 = *pw.slopes, *pw.intercepts, pw.ssr
+    a, b = *pw.slopes, *pw.intercepts
+    rss1 = pw.ssr if pw.ssr != 0 else NEGLEGTIBLE_AMOUNT
     pw.fit(2)
-    a1, a2, b1, b2, rss2 = *pw.slopes, *pw.intercepts, pw.ssr
+    a1, a2, b1, b2 = *pw.slopes, *pw.intercepts
+    rss2 = pw.ssr if pw.ssr != 0 else NEGLEGTIBLE_AMOUNT
     df1 = len(isis) - 2
     df2 = len(isis) - 4
     f_score = (rss1 - rss2)/(df1 - df2)/(rss2/df2)
@@ -166,6 +169,9 @@ def Four(params, spts, fs):
 
 #FOR FIRING PATTERN IDENTIFICATION
 def IdentifyPattern(fsl,swa,pss,isis):
+    isis = isis[isis!=0]
+    try: assert len(isis) > 0
+    except: return "D.SLN" if (fsl > 0) & (pss > 0) else ""
     pattern = ""
     if HasDelay(fsl, isis):
         pattern += "D."
@@ -185,4 +191,6 @@ def IdentifyPattern(fsl,swa,pss,isis):
             pattern += "PSWB"
         elif HasPSTUT(isis):
             pattern += "PSTUT"
+        elif HasSLN(pss,isis):
+            pattern += "SLN"
     return pattern

@@ -7,7 +7,6 @@ DATAFILE = h5py.File('/home/g6234203723/Spiking_patterns/src/NC_model/dataset/tw
 SAVEFILE = h5py.File('/home/g6234203723/Spiking_patterns/src/NC_model/dataset/twoparam_prop.hdf5','w')
 
 conds = ['borgkdr', 'cagk', 'cal', 'cat', 'can', 'hd', 'kad', 'kahp', 'kap', 'nahh']
-ts = np.linspace(0,1000,40001)
 for cond in conds:
     SAVEFILE.create_dataset(cond, (100,100,1000), dtype="float64")
     for i in range(100):
@@ -64,7 +63,6 @@ conds = [['borgkdr_cagk',
  'kahp_kap',
  'kahp_nahh',
  'kap_nahh']]
-ts = np.linspace(0,1000,40001)
 for cond in conds:
     for i in range(20):
         for j in range(20):
