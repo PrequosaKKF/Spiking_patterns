@@ -5,7 +5,7 @@ from IdenTools import *
 
 DATAFILE = h5py.File('/home/g6234203723/Spiking_patterns/src/NC_model/dataset/twoparam.hdf5','r')
 SAVEFILE = h5py.File('/home/g6234203723/Spiking_patterns/src/NC_model/dataset/twoparam_prop.hdf5','w')
-
+ts = np.linspace(0,1000,40001)
 conds = ['borgkdr', 'cagk', 'cal', 'can', 'hd', 'kad', 'kahp', 'kap', 'nahh']
 for cond in conds:
     SAVEFILE.create_dataset(cond, (100,100,1000), dtype="float64")
@@ -17,7 +17,7 @@ for cond in conds:
 '''
 DATAFILE = h5py.File('/home/g6234203723/Spiking_patterns/src/NC_model/dataset/threeparams.hdf5','r')
 SAVEFILE = h5py.File('/home/g6234203723/Spiking_patterns/src/NC_model/dataset/threeparams_prop.hdf5','r+')
-
+ts = np.linspace(0,1000,40001)
 conds = [['borgkdr_cagk',
  'borgkdr_cal',
  'borgkdr_cat',
