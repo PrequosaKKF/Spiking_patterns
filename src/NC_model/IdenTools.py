@@ -117,15 +117,15 @@ def RunSolverStatTests(fsl, isis, START_TIME=START_TIME, ALPHA=ALPHA, RAPID=RAPI
     df2 = len(isis) - 4
     f_score = (rss1 - rss2)/(df1 - df2)/(rss2/df2)
     p_value = f.cdf(f_score, df1, df2)
-    pattern = ['RASP.', 'ASP.', "No Adaptation"]
+    pattern = ['RASP.', 'ASP.', 'NASP']
 
     if p_value < ALPHA:
         pat = pattern[np.argwhere(np.abs(a) >= (RAPID, INERT, 0))[0,0]]
         return "No Adaptation" if pat == 'NASP' else pat
     elif (1 - p_value) < ALPHA:
         pat1 = pattern[np.argwhere(np.abs(a1) >= (RAPID, INERT, 0))[0,0]]
-        pat2 = pattern[np.argwhere(np.abs(a2) >= (RAPID, INERT, 0))[0,0]] 
-        return "No Adaptation" if pat1 == "No Adaptation" else pat1 + pat2
+        pat2 = pattern[np.argwhere(np.abs(a2) >= (RAPID, INERT, 0))[0,0]]
+        return "No Adaptation" if pat1 == 'NASP' else pat1 + pat2
     else:
         return "No Adaptation"
 def HasPSTUT(isis, FACTOR=5):
