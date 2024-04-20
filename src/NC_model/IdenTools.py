@@ -5,9 +5,13 @@ import pwlf
 
 #CONSTANTS
 NEGLEGTIBLE_AMOUNT = 1e-10
-SPIKE_DIFF=10
+SPIKE_DIFF=20
+HIGH_FREQ=25
+RAPID=0.2
+INERT=0.003
 START_TIME=200
 STOP_TIME=800
+ALPHA=0.005 #significant level
 
 #SOME USEFUL FUNCTIONS
 def MovingAverage(array):
@@ -93,31 +97,37 @@ def HasTSWBorTSTUT(isis, swa, pss, PRE_FACTOR=2.5, POST_FACTOR=1.5, HIGH_FREQ=25
 def HasTSWB(swa, MIN_SWA=5):
     if swa > MIN_SWA: return True
     else: return False
-def RunSolverStatTests(fsl, isis, START_TIME=START_TIME, ALPHA=0.005, RAPID=0.2, INERT=0.003):
-    try: assert len(isis) >= 3
-    except: return False
+def RunSolverStatTests(fsl, isis, START_TIME=START_TIME, ALPHA=ALPHA, RAPID=RAPID, INERT=INERT):
+    try: assert len(isis) > 4
+    except: return '' #Not enough ISIs for Statistical Test
+
     spts = START_TIME + fsl + np.concatenate(([0], np.cumsum(isis)))
     fs = 1e3/isis
     pw = pwlf.PiecewiseLinFit(spts[:-1], fs)
+
     pw.fit(1)
     a, b = *pw.slopes, *pw.intercepts
-    rss1 = pw.ssr if pw.ssr != 0 else NEGLEGTIBLE_AMOUNT
+    rss1 = pw.ssr if pw.ssr > 0 else NEGLEGTIBLE_AMOUNT
+
     pw.fit(2)
     a1, a2, b1, b2 = *pw.slopes, *pw.intercepts
-    rss2 = pw.ssr if pw.ssr != 0 else NEGLEGTIBLE_AMOUNT
+    rss2 = pw.ssr if pw.ssr > 0 else NEGLEGTIBLE_AMOUNT
+
     df1 = len(isis) - 2
     df2 = len(isis) - 4
     f_score = (rss1 - rss2)/(df1 - df2)/(rss2/df2)
-    c = f.cdf(f_score, df1, df2)
-    p_value = c
-    pattern = ['RASP.', 'ASP.', 'NASP']
+    p_value = f.cdf(f_score, df1, df2)
+    pattern = ['RASP.', 'ASP.', "No Adaptation"]
+
     if p_value < ALPHA:
-        return pattern[np.argwhere(np.abs(a) >= (RAPID, INERT, 0))[0,0]]
-    elif 1 - p_value < ALPHA:
-        return pattern[np.argwhere(np.abs(a1) >= (RAPID, INERT, 0))[0,0]] \
-            + pattern[np.argwhere(np.abs(a2) >= (RAPID, INERT, 0))[0,0]]
+        pat = pattern[np.argwhere(np.abs(a) >= (RAPID, INERT, 0))[0,0]]
+        return "No Adaptation" if pat == 'NASP' else pat
+    elif (1 - p_value) < ALPHA:
+        pat1 = pattern[np.argwhere(np.abs(a1) >= (RAPID, INERT, 0))[0,0]]
+        pat2 = pattern[np.argwhere(np.abs(a2) >= (RAPID, INERT, 0))[0,0]] 
+        return "No Adaptation" if pat1 == "No Adaptation" else pat1 + pat2
     else:
-        return False
+        return "No Adaptation"
 def HasPSTUT(isis, FACTOR=5):
     try: assert len(isis) > 1
     except: return False
@@ -134,11 +144,18 @@ def HasPSWB(isis, swa, FACTOR=5, MIN_SWA=5):
     except: return False
     if (isis[i]/isis[i-1] + isis[i]/isis[i+1] > FACTOR) & (swa > MIN_SWA): return True
     else: return False
+def HasFastTransient(isis, RAPID=RAPID):
+    fs = 1e3/isis
+    is_rapid = np.abs((fs[1:] - fs[:-1])/isis[:-1]) >= RAPID
+    if np.any(is_rapid):
+        final = np.argwhere(is_rapid).flatten()[-1]
+        isis = isis[np.arange(len(isis)) > final]
+        return True, isis
+    else: return False, isis
 def HasSLN(pss, isis, FACTOR=2):
     try: assert len(isis) > 0
     except: return False
-    if (pss > FACTOR*np.mean(isis)) & (pss > FACTOR*np.max(isis)):
-        return True
+    if (pss > FACTOR*np.mean(isis)) & (pss > FACTOR*np.max(isis)): return True
     else: return False
 
 #FOR PIECEWISE LINEAR REGRESSION
@@ -168,29 +185,58 @@ def Four(params, spts, fs):
     return ResidualSumofSquares(ys, fs)
 
 #FOR FIRING PATTERN IDENTIFICATION
-def IdentifyPattern(fsl,swa,pss,isis):
-    isis = isis[isis!=0]
-    try: assert len(isis) > 0
-    except: return "D.SLN" if (fsl > 0) & (pss > 0) else ""
-    pattern = ""
+def FirstStage(pattern, fsl, isis):
     if HasDelay(fsl, isis):
         pattern += "D."
+    return pattern, isis
+def SecondStage(pattern, swa, pss, isis):
     has, isis = HasTSWBorTSTUT(isis, swa, pss)
     if has:
         if HasTSWB(swa):
             pattern += "TSWB."
         else:
             pattern += "TSTUT."
+    return pattern, isis
+def ThirdStage(pattern, fsl, pss, swa, isis):
     res = RunSolverStatTests(fsl,isis)
-    if res:
-        pattern += res
-        if (res != "ASP.NASP") & HasSLN(pss,isis):
-            pattern += "SLN"
-    else:
+    if res == "No Adaptation":
         if HasPSWB(isis,swa):
             pattern += "PSWB"
         elif HasPSTUT(isis):
             pattern += "PSTUT"
-        elif HasSLN(pss,isis):
+        else:
+            has, isis = HasFastTransient(isis, RAPID)
+            if has:
+                pattern += "RASP."
+                ThirdStage(pattern, fsl, pss, swa, isis)
+            else:
+                pattern += "NASP"
+    else:
+        pattern += res
+        if (res != "ASP.NASP") & HasSLN(pss,isis):
             pattern += "SLN"
+    return pattern, isis
+
+def IdentifyPattern(fsl,swa,pss,isis):
+    pattern = ''
+    isis = isis[isis>0]
+    try: assert len(isis) > 0
+    except:
+        if fsl > 0:
+            pattern += 'D.'
+        if pss > 0:
+            pattern += 'SLN'
+        return pattern
+    
+    pattern, isis = FirstStage(pattern, fsl, isis)
+    pattern, isis = SecondStage(pattern, swa, pss, isis)
+    pattern, isis = ThirdStage(pattern, fsl, pss, swa, isis)
+
     return pattern
+
+#Firing pattern families
+fpfamilies = {
+    'regular' : ['D.SLN','NASP', 'ASP.','SLN'],
+    'burst': ['TSWB.SLN', 'PSWB'],
+    'inert': ['']
+}
